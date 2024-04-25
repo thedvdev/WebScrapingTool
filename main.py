@@ -1,30 +1,45 @@
+import csv
 import requests
 from bs4 import BeautifulSoup
-import csv
 
-# Define the URL of the website to scrape
-url = 'https://example.com'
+def scrape_website(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
 
-# Send a GET request to the website
-response = requests.get(url)
+    # Find all the elements you want to scrape
+    data = soup.find_all('div', {'class': 'product-item'})
 
-# Parse the HTML content of the website using BeautifulSoup
-soup = BeautifulSoup(response.text, 'html.parser')
+    # Create a list to store the scraped data
+    scraped_data = []
 
-# Find the elements on the website that contain the data you want to scrape
-data = []
-for item in soup.find_all('div', class_='data-item'):
-    data.append({
-        'title': item.find('h2').text,
-        'description': item.find('p').text
-    })
+    # Extract the relevant data from each element
+    for item in data:
+        title = item.find('h2').text.strip()
+        price = item.find('span', {'class': 'price'}).text.strip()
+        description = item.find('p', {'class': 'description'}).text.strip()
+        image_url = item.find('img')['src']
 
-# Save the scraped data to a CSV file
-csv_file = open('scraped_data.csv', 'w')
-csv_writer = csv.DictWriter(csv_file, fieldnames=['title', 'description'])
-csv_writer.writeheader()
+        # Create a dictionary for each item and append it to the list
+        product_data = {
+            'Title': title,
+            'Price': price,
+            'Description': description,
+            'Image URL': image_url
+        }
+        scraped_data.append(product_data)
 
-for item in data:
-    csv_writer.writerow(item)
+    return scraped_data
 
-csv_file.close()
+def save_to_csv(data, filename):
+    with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['Title', 'Price', 'Description', 'Image URL']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for item in data:
+            writer.writerow(item)
+
+# Example usage
+url = 'https://www.example.com'
+scraped_data = scrape_website(url)
+save_to_csv(scraped_data, 'scraped_data.csv')
