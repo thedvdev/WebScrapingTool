@@ -12,7 +12,7 @@ def scrape_website(url):
     # Create a list to store the scraped data
     scraped_data = []
 
-    # Extract the relevant data from each element
+    # Extract the relevant data from each element (You can change it to whatever you want)
     for item in data:
         title = item.find('h2').text.strip()
         price = item.find('span', {'class': 'price'}).text.strip()
