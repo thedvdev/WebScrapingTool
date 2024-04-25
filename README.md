@@ -8,4 +8,4 @@
 ```
 pip install beautifulsoup4
 ```
-> It may not be usable, only as an example of getting data from sites, so feel free to copy and edit
+> It may not be usable, only as an example of getting data from sites, so feel free to copy and edit.
