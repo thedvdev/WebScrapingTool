@@ -1,0 +1,1 @@
+Web Scraping Tool - a tool that can scrape data from websites and save it in a structured format (e.g. CSV, TXT). This can be useful for extracting data from online sources for analysis or research purposes.
